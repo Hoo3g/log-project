@@ -1,6 +1,6 @@
-1. Cài đặt posgresql (trên docker)
+# 1. Cài đặt posgresql (trên docker)
 
-## 2. Tạo table logs giả sử là: 
+# 2. Tạo table logs giả sử là: 
 - Cấu trúc bảng như sau:
 
 ```
