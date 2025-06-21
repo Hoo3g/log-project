@@ -1,6 +1,6 @@
-# 1. Cài đặt posgresql (trên docker)
+# ✅ 1. Cài đặt posgresql (trên docker)
 
-# 2. Tạo table logs giả sử là: 
+# ✅ 2. Tạo table logs giả sử là: 
 - Cấu trúc bảng như sau:
 
 ```
@@ -17,7 +17,7 @@ CREATE TABLE storage_event (
 );
 ```
 
-# ✅ 2. Viết chương trình Java đọc log và gửi vào OpenSearch
+# ✅ 3. Viết chương trình Java đọc log và gửi vào OpenSearch
 
 Viết chương trình Java thực hiện các bước sau:
 
@@ -27,9 +27,9 @@ Viết chương trình Java thực hiện các bước sau:
 
 ⚠️ Ghi chú: Không bắt buộc dùng Spring Boot. Java thuần + OpenSearch client sẽ nhẹ và nhanh hơn.
    
-# ✅ 3. Xây dựng chương trình java để tìm kiếm nội dung log. Kết quả trả về json.
+# ✅ 4. Xây dựng chương trình java để tìm kiếm nội dung log. Kết quả trả về json.
    
-# ✅ 4. Xây dựng dashboard để show kết quả logs. Kết quả trả về dạng json,
+# ✅ 5. Xây dựng dashboard để show kết quả logs. Kết quả trả về dạng json,
 
 ```
 Gợi ý: 
