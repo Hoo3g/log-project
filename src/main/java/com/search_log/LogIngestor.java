@@ -25,7 +25,7 @@ public class LogIngestor {
 
     private static final String DB_URL = "jdbc:postgresql://localhost:1234/storage_event";
     private static final String DB_USER = "admin";
-    private static final String DB_PASSWORD = "mysecret01";
+    private static final String DB_PASSWORD = "Hus@334nt";
 
     private static final String OPENSEARCH_HOST = "localhost";
     private static final int OPENSEARCH_PORT = 9200;
