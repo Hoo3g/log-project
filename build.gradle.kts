@@ -5,7 +5,7 @@ plugins {
 
 group = "com.example"
 version = "1.0-SNAPSHOT"
-// Chính xác, sử dụng Java 21
+
 java.sourceCompatibility = JavaVersion.VERSION_21
 
 repositories {
