@@ -1,0 +1,218 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    background-color: #f4f7f9;
+    color: #333;
+    margin: 0;
+}
+
+.App {
+    text-align: center;
+}
+
+.App-header {
+    background-color: #282c34;
+    padding: 20px;
+    color: white;
+    margin-bottom: 2rem;
+}
+
+main {
+    padding: 0 2rem;
+    display: flex;
+    gap: 2rem;
+}
+
+.search-panel {
+    flex: 0 0 300px; /* Không co giãn, rộng 300px */
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    align-self: flex-start;
+}
+
+.search-panel h3 {
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.search-panel button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    background-color: #1c1b1b;
+    cursor: pointer;
+    text-align: left;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.2s, border-color 0.2s;
+    color: #dee0e1; /* Đây là màu xanh dương đậm */
+    font-weight: 500;
+}
+
+.search-panel button:hover {
+    background-color: #616263;
+    border-color: #ccc;
+}
+
+.search-panel button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+
+.results-area {
+    flex-grow: 1; /* Chiếm hết không gian còn lại */
+    text-align: left;
+}
+
+.results-area h2 {
+    color: #282c34;
+}
+
+.error {
+    color: #d9534f;
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.log-table-container {
+    overflow-x: auto; /* Cho phép cuộn ngang nếu bảng quá rộng */
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+    vertical-align: top;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+tbody tr:nth-of-type(even) {
+    background-color: #f9f9f9;
+}
+
+pre {
+    background-color: #eef1f3;
+    padding: 10px;
+    border-radius: 4px;
+    white-space: pre-wrap; /* Xuống dòng tự động */
+    word-wrap: break-word; /* Ngắt từ nếu quá dài */
+    margin: 0;
+    font-size: 13px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* Thêm vào cuối file App.css */
+
+/* Gom các panel bên trái lại */
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem; /* Khoảng cách giữa các panel */
+    flex: 0 0 300px;
+}
+
+/* Sửa lại .search-panel để nó không chiếm toàn bộ chiều cao */
+.search-panel {
+    flex: initial; /* Bỏ flex-grow */
+    align-self: flex-start;
+    width: 100%; /* Chiếm toàn bộ chiều rộng của .left-panel */
+    box-sizing: border-box; /* Đảm bảo padding không làm panel rộng ra */
+}
+
+/* Style cho panel nạp dữ liệu mới */
+.ingest-panel {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    align-self: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.ingest-panel h3 {
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.ingest-panel button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #c0392b;
+    background-color: #e74c3c;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.ingest-panel button:hover:not(:disabled) {
+    background-color: #c0392b;
+}
+
+.ingest-panel button:disabled {
+    background-color: #d98880;
+    border-color: #d98880;
+    cursor: not-allowed;
+}
+
+/* Style cho các thông báo trạng thái */
+.status-message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    border: 1px solid;
+}
+
+.status-message.info {
+    background-color: #e7f3fe;
+    border-color: #a6cff5;
+    color: #31708f;
+}
+
+.status-message.success {
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    color: #3c763d;
+}
+
+.status-message.error {
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    color: #a94442;
+}
+
+/* Sửa lại layout main để phù hợp với .left-panel */
+main {
+    display: flex;
+    gap: 2rem;
+    padding: 0 2rem;
+}
