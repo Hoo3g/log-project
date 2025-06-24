@@ -2,16 +2,8 @@ package com.search_log;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.HttpHost;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.opensearch.client.opensearch.OpenSearchClient;
 import org.opensearch.client.opensearch.core.IndexRequest;
-import org.opensearch.client.transport.OpenSearchTransport;
-import org.opensearch.client.RestClient;
-import org.opensearch.client.transport.rest_client.RestClientTransport;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -26,36 +18,20 @@ public class LogIngestor {
     private static final String DB_URL = "jdbc:postgresql://localhost:1234/storage_event";
     private static final String DB_USER = "admin";
     private static final String DB_PASSWORD = "Hus@334nt";
-
-    private static final String OPENSEARCH_HOST = "localhost";
-    private static final int OPENSEARCH_PORT = 9200;
     private static final String INDEX_NAME = "storage-events";
 
-    public static void main(String[] args) {
-
-        // Khởi tạo client cho OpenSearch
-        final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY,
-                new UsernamePasswordCredentials("admin", "Hus@334nt"));
-
-        RestClient restClient = RestClient.builder(
-                new HttpHost(OPENSEARCH_HOST, OPENSEARCH_PORT, "http")
-        ).setHttpClientConfigCallback(httpClientBuilder ->
-                httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider)
-        ).build();
-
-        OpenSearchTransport transport = new RestClientTransport(restClient, new org.opensearch.client.json.jackson.JacksonJsonpMapper());
-        OpenSearchClient client = new OpenSearchClient(transport);
-
-
+    // Phương thức này sẽ được gọi bởi API Handler
+    public int runIngest() throws Exception {
+        // Client được tạo mỗi lần gọi, hoặc bạn có thể truyền nó vào
+        OpenSearchClient client = LogSearcher.initializeClient();
         ObjectMapper jsonMapper = new ObjectMapper();
+        int count = 0;
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM storage_event ORDER BY created_at")) {
 
-            System.out.println("Starting to ingest logs from PostgreSQL to OpenSearch...");
-            int count = 0;
+            System.out.println("Starting to ingest logs from PostgreSQL to OpenSearch via API call...");
 
             while (rs.next()) {
                 Map<String, Object> eventDocument = new HashMap<>();
@@ -89,10 +65,9 @@ public class LogIngestor {
                 System.out.println("Indexed event: " + eventId);
             }
             System.out.println("------------------------------------------");
-            System.out.println("Successfully ingested " + count + " log events into OpenSearch index '" + INDEX_NAME + "'.");
+            System.out.println("Successfully ingested " + count + " log events.");
 
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        return count;
     }
 }
