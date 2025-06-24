@@ -3,7 +3,7 @@ plugins {
     application
 }
 
-group = "com.example"
+group = "com.search_log"
 version = "1.0-SNAPSHOT"
 
 java.sourceCompatibility = JavaVersion.VERSION_21
@@ -27,16 +27,6 @@ dependencies {
     implementation("org.slf4j:slf4j-simple:2.0.7")
 }
 
-tasks.register<JavaExec>("runIngestor") {
-    group = "Application"
-    description = "Runs the LogIngestor to send data to OpenSearch."
-    classpath = sourceSets.main.get().runtimeClasspath
-    mainClass.set("LogIngestor")
-}
-
-tasks.register<JavaExec>("runSearcher") {
-    group = "Application"
-    description = "Runs the LogSearcher to query data from OpenSearch."
-    classpath = sourceSets.main.get().runtimeClasspath
-    mainClass.set("LogSearcher")
+application {
+    mainClass.set("com.search_log.LogApiServer")
 }
