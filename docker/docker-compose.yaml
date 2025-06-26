@@ -1,20 +1,84 @@
+version: "3.8"
+
 services:
+  # PostgreSQL
   postgres:
     image: postgres:17
     container_name: local-postgres
     ports:
       - "1234:5432"
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: Hus@334nt
-      POSTGRES_DB: storage_event
-
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - shared_network
+    restart: unless-stopped
 
+  # OpenSearch
+  opensearch:
+    image: opensearchproject/opensearch:2.19.1
+    container_name: opensearch
+    restart: unless-stopped
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - OPENSEARCH_JAVA_OPTS=${OPENSEARCH_JAVA_OPTS}
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${OPENSEARCH_INITIAL_ADMIN_PASSWORD}
+      - plugins.security.ssl.http.enabled=false
+      - logger.level=WARN
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+    volumes:
+      - ${OPENSEARCH_DATA}:/usr/share/opensearch/data
+      - ./logs:/usr/share/opensearch/logs
+    networks:
+      - shared_network
+    ports:
+      - "9200:9200"
+
+
+
+  # OpenSearch Dashboards
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.19.1
+    container_name: ${OPENSEARCH_DASHBOARD_CONTAINER}
+    ports:
+      - "5601:5601"
+    volumes:
+      - ./config/opensearch_dashboards.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml
+      - ./logs:/usr/share/opensearch-dashboards/logs
+    networks:
+      - shared_network
+    depends_on:
+      - opensearch # Đảm bảo opensearch khởi động trước
+    restart: unless-stopped
+
+# Định nghĩa network chung
 networks:
   shared_network:
+    name: shared_network # Đặt tên cố định cho network
     external: true
+
+# Định nghĩa volume cho OpenSearch
+volumes:
+    opensearch_data:
+      driver: local
+      driver_opts:
+        type: none
+        device: ${OPENSEARCH_DATA}
+        o: bind
